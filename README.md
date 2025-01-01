@@ -1,8 +1,17 @@
-# React + Vite
+# React Quiz App 🎯
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a dynamic and interactive quiz application built with React. The project is designed to provide a hands-on learning experience while mastering the useReducer hook, which is a powerful tool for managing complex state in React applications.
 
-Currently, two official plugins are available:
+Purpose of the Project
+The primary goal of this project is to:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Explore and deepen the understanding of the useReducer hook.
+- Implement clean and scalable state management for quiz functionality.
+- Enhance React development skills through practical application.
+
+## Features
+
+- User-friendly Interface: Intuitive and responsive design for smooth user interaction.
+- Dynamic State Management: State transitions for questions, answers, score tracking, and quiz completion are managed using useReducer.
+- Customizable Quizzes: Easily add or modify questions and answers.
+- Real-time Feedback: Track progress and scores as the quiz is taken.
