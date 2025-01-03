@@ -12,6 +12,9 @@ const initialState = {
   status: "loading",
   //current question
   index: 0,
+  //my answer
+  answer: null,
+  points: 0,
 };
 
 function reducer(state, action) {
@@ -22,13 +25,24 @@ function reducer(state, action) {
       return { ...state, status: "error" };
     case "quizStart":
       return { ...state, status: "active" };
+    case "newAnswer":
+      const currentQuestion = state.questions.at(state.index);
+
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === currentQuestion.correctOption
+            ? state.points + currentQuestion.points
+            : state.points,
+      };
     default:
       throw new Error("unknown action");
   }
 }
 
 function App() {
-  const [{ questions, status, index }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index, answer }, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     async function getQuestions() {
       try {
@@ -56,7 +70,9 @@ function App() {
         {status === "loading" && <Loader />}
         {status === "error" && <Error />}
         {status === "ready" && <StartScreen questions={questions} startGame={startGame} />}
-        {status === "active" && <Questions question={questions[index]} />}
+        {status === "active" && (
+          <Questions question={questions[index]} dispatch={dispatch} answer={answer} />
+        )}
       </Main>
     </div>
   );
