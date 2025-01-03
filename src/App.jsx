@@ -4,6 +4,7 @@ import Main from "./components/Main";
 import Loader from "./components/Loader";
 import Error from "./components/Error";
 import StartScreen from "./components/StartScreen";
+import Questions from "./components/Questions";
 
 const initialState = {
   questions: [],
@@ -18,6 +19,8 @@ function reducer(state, action) {
       return { ...state, questions: action.payload, status: action.status };
     case "dataFailed":
       return { ...state, status: "error" };
+    case "quizStart":
+      return { ...state, status: "active" };
     default:
       throw new Error("unknown action");
   }
@@ -41,13 +44,18 @@ function App() {
     }
     getQuestions();
   }, []);
+
+  function startGame() {
+    dispatch({ type: "quizStart" });
+  }
   return (
     <div className="app">
       <Header />
       <Main>
         {status === "loading" && <Loader />}
         {status === "error" && <Error />}
-        {status === "ready" && <StartScreen questions={questions} />}
+        {status === "ready" && <StartScreen questions={questions} startGame={startGame} />}
+        {status === "active" && <Questions />}
       </Main>
     </div>
   );
