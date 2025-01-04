@@ -27,7 +27,7 @@ function reducer(state, action) {
     case "quizStart":
       return { ...state, status: "active" };
     case "nextQuestion":
-      return { ...state, index: state.index + 1, answer: nullfe };
+      return { ...state, index: state.index + 1, answer: null };
     case "newAnswer": {
       const currentQuestion = state.questions.at(state.index);
 
