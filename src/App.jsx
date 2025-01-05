@@ -7,6 +7,7 @@ import StartScreen from "./components/StartScreen";
 import Questions from "./components/Questions";
 import NextButton from "./components/NextButton";
 import Progress from "./components/Progress";
+import FinishedScreen from "./components/FinishedScreen";
 
 const initialState = {
   questions: [],
@@ -93,6 +94,7 @@ function App() {
             <NextButton answer={answer} dispatch={dispatch} />
           </>
         )}
+        {status === "finished" && <FinishedScreen points={points} maxPoints={maxPoints} />}
       </Main>
     </div>
   );
