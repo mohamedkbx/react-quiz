@@ -11,6 +11,8 @@ import FinishedScreen from "./components/FinishedScreen";
 import Timer from "./components/Timer";
 import Footer from "./components/Footer";
 
+const SEC_PER_QUESTION = 30;
+
 const initialState = {
   questions: [],
   // loading,error,ready,active,finished
@@ -21,6 +23,7 @@ const initialState = {
   answer: null,
   points: 0,
   highscore: 0,
+  secondsRemaining: null,
 };
 
 function reducer(state, action) {
@@ -30,7 +33,11 @@ function reducer(state, action) {
     case "dataFailed":
       return { ...state, status: "error" };
     case "quizStart":
-      return { ...state, status: "active" };
+      return {
+        ...state,
+        status: "active",
+        secondsRemaining: state.questions.length * SEC_PER_QUESTION,
+      };
     case "nextQuestion":
       return { ...state, index: state.index + 1, answer: null };
     case "finished": {
@@ -60,16 +67,20 @@ function reducer(state, action) {
         highscore: state.highscore,
       };
     // return { ...state, status: "ready", index: 0, answer: null, points: 0 };
+    case "tich":
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? "finished" : state.status,
+      };
     default:
       throw new Error("unknown action");
   }
 }
 
 function App() {
-  const [{ questions, status, index, answer, points, highscore }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ questions, status, index, answer, points, highscore, secondsRemaining }, dispatch] =
+    useReducer(reducer, initialState);
 
   const maxPoints = questions.reduce((acc, question) => acc + question.points, 0);
   useEffect(() => {
@@ -110,7 +121,7 @@ function App() {
             />
             <Questions question={questions[index]} dispatch={dispatch} answer={answer} />
             <Footer>
-              <Timer />
+              <Timer dispatch={dispatch} time={secondsRemaining} />
               <NextButton
                 answer={answer}
                 dispatch={dispatch}
