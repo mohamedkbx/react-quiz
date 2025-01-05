@@ -18,6 +18,7 @@ const initialState = {
   //my answer
   answer: null,
   points: 0,
+  highscore: 0,
 };
 
 function reducer(state, action) {
@@ -30,6 +31,13 @@ function reducer(state, action) {
       return { ...state, status: "active" };
     case "nextQuestion":
       return { ...state, index: state.index + 1, answer: null };
+    case "finished": {
+      return {
+        ...state,
+        status: "finished",
+        highscore: state.points > state.highscore ? state.points : state.highscore,
+      };
+    }
     case "newAnswer": {
       const currentQuestion = state.questions.at(state.index);
 
@@ -42,13 +50,21 @@ function reducer(state, action) {
             : state.points,
       };
     }
+    case "restart":
+      return {
+        ...initialState,
+        questions: state.questions,
+        status: "ready",
+        highscore: state.highscore,
+      };
+    // return { ...state, status: "ready", index: 0, answer: null, points: 0 };
     default:
       throw new Error("unknown action");
   }
 }
 
 function App() {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points, highscore }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -91,10 +107,22 @@ function App() {
               answer={answer}
             />
             <Questions question={questions[index]} dispatch={dispatch} answer={answer} />
-            <NextButton answer={answer} dispatch={dispatch} />
+            <NextButton
+              answer={answer}
+              dispatch={dispatch}
+              index={index}
+              numQuestions={questions.length}
+            />
           </>
         )}
-        {status === "finished" && <FinishedScreen points={points} maxPoints={maxPoints} />}
+        {status === "finished" && (
+          <FinishedScreen
+            points={points}
+            maxPoints={maxPoints}
+            highscore={highscore}
+            dispatch={dispatch}
+          />
+        )}
       </Main>
     </div>
   );
